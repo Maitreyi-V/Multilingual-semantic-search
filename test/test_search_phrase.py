@@ -1,52 +1,48 @@
-from run_search import search
+import unittest
+from search import search_sentence_or_word
 
-def test_search_returns_only_matching_lines():
-    matches = search("karma", "gita/3-43.md")
-    assert len(matches) > 0
-    assert all("karma" in line.lower() for line in matches)
+class TestSearchFunction(unittest.TestCase):
+    def test_basic_query(self):
+        text = "hello world\nhi there"
+        query = "hello"
+        expected_output = ["hello world"]
+        self.assertEqual(search_sentence_or_word(text, query), expected_output)
 
-def test_devanagari_word():
-    matches = search("कर्म", "gita/3-43.md")
-    assert all("कर्म" in line for line in matches)
+    def test_substring_match(self):
+        text = "karma yoga is important\nbhakti yoga\nKARMA rules"
+        query = "karma"
+        matches = search_sentence_or_word(text, query)
+        self.assertTrue(all("karma" in line.lower() for line in matches))
 
-def test_case_insensitive_uppercase():
-    matches = search("KARMA", "gita/3-43.md")
-    assert all("karma" in line.lower() for line in matches)
+    def test_devanagari_word(self):
+        text = "कर्म ही धर्म है\nज्ञान श्रेष्ठ है"
+        query = "कर्म"
+        matches = search_sentence_or_word(text, query)
+        self.assertTrue(all("कर्म" in line for line in matches))
 
-def test_no_match():
-    matches = search("banana", "gita/3-43.md")
-    assert matches == []
+    def test_no_match(self):
+        text = "this is some text"
+        query = "banana"
+        matches = search_sentence_or_word(text, query)
+        self.assertEqual(matches, [])
 
-def test_empty_query():
-    matches = search("", "gita/3-43.md")
-    assert matches == []
+    def test_empty_query(self):
+        text = "some content here"
+        query = ""
+        matches = search_sentence_or_word(text, query)
+        self.assertEqual(matches, [])
 
-def test_substring_search():
-    matches = search("kar", "gita/3-43.md")
-    assert all("kar" in line.lower() for line in matches)
+    def test_leading_trailing_spaces_in_query(self):
+        text = "karma is a law"
+        query = "  karma  "
+        matches = search_sentence_or_word(text, query)
+        self.assertTrue(all("karma" in line.lower() for line in matches))
 
-def test_multiple_occurrences_in_line():
-    matches = search("karma", "gita/3-43.md")
-    for line in matches:
-        if "karma" in line.lower():
-            assert line.lower().count("karma") >= 1
-
-def test_leading_trailing_whitespace_query():
-    matches = search("  karma  ", "gita/3-43.md")
-    assert all("karma" in line.lower() for line in matches)
-
-def test_special_characters_in_query():
-    matches = search("karma,", "gita/3-43.md")
-    assert all("karma" in line.lower() for line in matches)
+    def test_special_characters(self):
+        text = "karma, dharma."
+        query = "karma,"
+        matches = search_sentence_or_word(text, query)
+        self.assertTrue(all("karma" in line.lower() for line in matches))
 
 if __name__ == "__main__":
-    test_search_returns_only_matching_lines()
-    test_devanagari_word()
-    test_case_insensitive_uppercase()
-    test_no_match()
-    test_empty_query()
-    test_substring_search()
-    test_multiple_occurrences_in_line()
-    test_leading_trailing_whitespace_query()
-    test_special_characters_in_query()
-    print("All tests passed.")
+    unittest.main()
