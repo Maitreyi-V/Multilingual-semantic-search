@@ -1,12 +1,14 @@
-def read_file(file_path):
+"""Module for searching phrases or words within a block of text."""
+
+def read_file(path_to_file):
     """Reads a file and returns its content as a string."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
-            if not content.strip():
+        with open(path_to_file, 'r', encoding='utf-8') as file:
+            data = file.read()
+            if not data.strip():
                 print("The file is empty.")
                 return None
-            return content
+            return data
     except FileNotFoundError:
         print("File not found.")
         return None
@@ -32,16 +34,16 @@ def search_sentence_or_word(text: str, query: str) -> list:
 
 
 if __name__ == "__main__":
-    file_path = input("Enter the file path: ").strip()
-    content = read_file(file_path)
+    file_path_input = input("Enter the file path: ").strip()
+    file_content = read_file(file_path_input)
 
-    if content:
-        phrase = input("Enter the phrase to search: ").strip()
-        matches = search_sentence_or_word(content, phrase)
+    if file_content:
+        user_query = input("Enter the phrase to search: ").strip()
+        matched_lines = search_sentence_or_word(file_content, user_query)
 
-        if matches:
+        if matched_lines:
             print("Phrase found in the following lines:")
-            for line in matches:
-                print("-", line)
+            for matched_line in matched_lines:
+                print("-", matched_line)
         else:
             print("Phrase not found.")
