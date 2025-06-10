@@ -30,3 +30,20 @@ if __name__ == "__main__":
     print("\nTop semantic matches:")
     for text, score in matches:
         print(f"- {text} (score: {score:.4f})")
+
+        
+
+query = search_phrase
+# Convert to tensor
+query_embedding_tensor = model.encode(query, convert_to_tensor=True)
+print("With convert_to_tensor=True:")
+print("Type:", type(query_embedding_tensor))
+print("Shape:", query_embedding_tensor.shape)
+print("First 5 values:", query_embedding_tensor[:5])
+
+# Convert to list
+query_embedding_list = model.encode(query, convert_to_tensor=False)
+print("\nWith convert_to_tensor=False:")
+print("Type:", type(query_embedding_list))
+print("Length:", len(query_embedding_list))
+print("First 5 values:", query_embedding_list[:5])
