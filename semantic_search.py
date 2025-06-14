@@ -6,6 +6,9 @@ def semantic_search(texts, query, top_k=3):
     """
     Returns the top_k sentences from texts that semantically match the query.
     """
+    if not query.strip():
+        return []
+
     query_embedding = model.encode(query, convert_to_tensor=True)
     text_embeddings = model.encode(texts, convert_to_tensor=True)
 
