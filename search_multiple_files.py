@@ -44,9 +44,11 @@ def main():
 
     print("\nTop results across files:")
     for line, score in top_results:
-        index = lines.index(line)
-        file_origin = filenames[index]
-        print(f"- [{file_origin}] {line} (score: {score:.4f})")
+       matching_files = [filenames[i] for i, l in enumerate(lines) if l == line]
+       for file_origin in matching_files:
+          print(f"{file_origin}: {line.strip()} (score: {score:.4f})")
+
+
 
 
 if __name__ == "__main__":
