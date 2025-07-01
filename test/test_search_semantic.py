@@ -1,8 +1,35 @@
 import sys
 import os
 import unittest
+from semantic_search import get_embedding  
 
-# Ensure semantic_search.py is importable
+class TestSemanticSearch(unittest.TestCase):
+    def setUp(self):
+        self.texts = [
+            "Arjuna was confused about his duty in the war.",
+            "Krishna advised him to act without attachment.",
+            "Selfless action is the path to liberation.",
+            "The mind is restless and difficult to control.",
+            "Yoga is a way to master the mind and senses.",
+            "Karma Yoga teaches selfless action",
+            "One who sees inaction in action",
+            "Renunciation is not the mere abandoning of action",
+            "The soul is eternal",
+            "He who has conquered himself",
+            "Perform your duty without attachment",
+            "He who has conquered the mind is at peace",
+            "The soul is eternal, indestructible",
+            "Be equal in pleasure and pain",
+            "He who renounces the fruits of action is wise"
+        ]
+        self.text_embeddings = get_embedding(self.texts)  
+
+    def test_relevant_query(self):
+        query = "battle confusion"
+        result = semantic_search(query, self.texts, self.text_embeddings, top_k=2)
+        ...
+
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from semantic_search import semantic_search
 
