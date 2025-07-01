@@ -23,7 +23,7 @@ class TestMultipleModels(unittest.TestCase):
     def test_models_on_same_queries(self):
         for model in self.models:
             print(f"\n\nTesting model: {model}")
-            embeddings = get_embedding(self.texts, model=model)  # embed once
+            embeddings = get_embedding(self.texts, model=model) 
             for query in self.queries:
                 results = semantic_search(query, self.texts, text_embeddings=embeddings, model_name=model)
                 print(f"Query: {query}")
