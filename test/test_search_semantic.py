@@ -5,10 +5,12 @@ import sys
 import os
 import unittest
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from semantic_search import semantic_search
 from semantic_search_openAI import get_embeddings
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
 
 class TestSemanticSearch(unittest.TestCase):
     """Test suite for semantic search use-cases using GPT-style embeddings."""
@@ -73,7 +75,10 @@ class TestSemanticSearch(unittest.TestCase):
         """Test a query that should match a specific relevant sentence."""
         query = "giving up results of action"
         results = semantic_search(query, self.texts, self.text_embeddings)
-        self.assertTrue(any("Renunciation is not the mere abandoning of action" in line for line, _ in results))
+        self.assertTrue(
+            any("Renunciation is not the mere abandoning of action" in line for line,
+                 _ in results)
+                 )
 
     def test_soul_eternity(self):
         """Test a query that should match a specific relevant sentence."""
@@ -97,7 +102,10 @@ class TestSemanticSearch(unittest.TestCase):
         """Test a query that should match a specific relevant sentence."""
         query = "controlling the mind is self-mastery"
         results = semantic_search(query, self.texts, self.text_embeddings)
-        self.assertTrue(any("He who has conquered the mind is at peace" in line for line, _ in results))
+        self.assertTrue(
+            any("He who has conquered the mind is at peace" in line for line,
+                 _ in results)
+                 )
 
     def test_soul_indestructible(self):
         """Test a query that should match a specific relevant sentence."""
@@ -115,7 +123,10 @@ class TestSemanticSearch(unittest.TestCase):
         """Test a query that should match a specific relevant sentence."""
         query = "renouncing the fruits of action"
         results = semantic_search(query, self.texts, self.text_embeddings)
-        self.assertTrue(any("He who renounces the fruits of action is wise" in line for line, _ in results))
+        self.assertTrue(
+            any("He who renounces the fruits of action is wise" in line for line,
+                 _ in results)
+                 )
 
 if __name__ == "__main__":
     unittest.main()
