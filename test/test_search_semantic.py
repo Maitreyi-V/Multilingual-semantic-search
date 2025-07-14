@@ -31,26 +31,50 @@ class TestSemanticSearch(unittest.TestCase):
             "He who has conquered the mind is at peace",
             "The soul is eternal, indestructible",
             "Be equal in pleasure and pain",
-            "He who renounces the fruits of action is wise"
+            "He who renounces the fruits of action is wise",
+
+            "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन",
+            "योगः कर्मसु कौशलम्",
+            "अहिंसा परमो धर्मः",
+            "सत्यं वद धर्मं चर",
+            "न त्वेवाहं जातु नासं",
+            "विद्या ददाति विनयं",
+            "मन एव मनुष्याणां कारणं बन्धमोक्षयोः",
+            "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन",                    
+            "योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय",             
+            "ज्ञानेन तु तदज्ञानं येषां नाशितमात्मनः",               
+            "श्रद्धावान् लभते ज्ञानम्",                              
+            "न हि ज्ञानेन सदृशं पवित्रमिह विद्यते",                  
+            "सत्त्वं सुखे सञ्जयति",                                 
+            "नैव किञ्चित्करोमीति युक्तो मन्येत तत्त्ववित्",          
+            "सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज",                
+            "अहिंसा परमो धर्मः",                                     
+            "विद्या विनयेन शोभते",                                 
+            "उद्धरेदात्मनात्मानं",                                   
+            "आत्मा वा अरे दृष्टव्यः श्रोतव्यो मन्तव्यो निदिध्यासितव्यः",  
+            "यथा दीपो निवातस्थो नेङ्गते सोपमा स्मृता",              
+            "न तस्य कार्यं कारणं च विद्यते",                        
+            "न हन्यते हन्यमाने शरीरे"  
         ]
-        self.text_embeddings = get_embeddings(self.texts)
+        self.model_name = "text-embedding-3-small"
+        self.text_embeddings = get_embeddings(self.texts, model=self.model_name)
 
     def test_relevant_query(self):
         """Test a query that should match a specific relevant sentence."""
         query = "battle confusion"
-        result = semantic_search(query, self.texts, self.text_embeddings, top_k=2)
+        result = semantic_search(query, self.texts, self.text_embeddings, model_name=self.model_name)
         self.assertIn("Arjuna was confused about his duty in the war.", [r[0] for r in result])
 
     def test_spiritual_query(self):
         """Test a query that should match a specific relevant sentence."""
         query = "how to reach liberation"
-        result = semantic_search(query, self.texts, self.text_embeddings, top_k=2)
+        result = semantic_search(query, self.texts, self.text_embeddings, model_name=self.model_name)
         self.assertTrue(any("liberation" in r[0].lower() for r in result))
 
     def test_irrelevant_query(self):
         """Test a query that should match a specific relevant sentence."""
         query = "football game rules"
-        result = semantic_search(query, self.texts, self.text_embeddings, top_k=2)
+        result = semantic_search(query, self.texts, self.text_embeddings, model_name=self.model_name)
         self.assertTrue(all(score < 0.4 for _, score in result))
 
     def test_empty_query(self):
@@ -128,5 +152,17 @@ class TestSemanticSearch(unittest.TestCase):
                  _ in results)
                  )
 
+
+    def test_sanskrit_query_nonviolence(self):
+        query = "importance of non-violence"
+        result = semantic_search(query, self.texts, self.text_embeddings, top_k=3)
+        self.assertTrue(any("अहिंसा परमो धर्मः" in line for line, _ in result))
+
+    def test_sanskrit_query_duty(self):
+        query = "do your duty but not expect the result"
+        result = semantic_search(query, self.texts, self.text_embeddings, top_k=3)
+        self.assertTrue(any("कर्मण्येवाधिकारस्ते मा फलेषु कदाचन" in line for line, _ in result))    
+
+        
 if __name__ == "__main__":
     unittest.main()
